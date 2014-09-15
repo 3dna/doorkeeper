@@ -43,5 +43,23 @@ module Doorkeeper::OAuth
       allow(pre_auth).to receive(:authorizable?).and_return(false)
       expect(subject.authorize).to be_a(ErrorResponse)
     end
+
+    context 'with custom expirations' do
+
+      let(:custom_ttl) { 1233 }
+
+      before do
+        Doorkeeper.configuration.stub(:custom_access_token_expiration) do
+          lambda { |app| custom_ttl }
+        end
+      end
+
+      it 'should use the custom ttl' do
+        subject.authorize
+        token = Doorkeeper::AccessToken.first
+        expect(token.expires_in).to eq(custom_ttl)
+      end
+
+    end
   end
 end
