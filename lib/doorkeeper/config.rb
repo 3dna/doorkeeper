@@ -172,15 +172,15 @@ module Doorkeeper
              warn(I18n.translate('doorkeeper.errors.messages.credential_flow_not_configured'))
              nil
            end)
-    option :skip_authorization,            default: ->(routes) {}
-    option :access_token_expires_in,       default: 7200
+    option :skip_authorization,             default: ->(routes) {}
+    option :access_token_expires_in,        default: 7200
     option :custom_access_token_expiration, default: lambda { |app| nil }
-    option :authorization_code_expires_in, default: 600
-    option :orm,                           default: :active_record
-    option :native_redirect_uri,           default: 'urn:ietf:wg:oauth:2.0:oob'
-    option :active_record_options,         default: {}
-    option :realm,                         default: 'Doorkeeper'
-    option :wildcard_redirect_uri,         default: false
+    option :authorization_code_expires_in,  default: 600
+    option :orm,                            default: :active_record
+    option :native_redirect_uri,            default: 'urn:ietf:wg:oauth:2.0:oob'
+    option :active_record_options,          default: {}
+    option :realm,                          default: 'Doorkeeper'
+    option :wildcard_redirect_uri,          default: false
     option :grant_flows,
            default: %w(authorization_code implicit password client_credentials)
 
