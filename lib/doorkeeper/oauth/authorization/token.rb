@@ -11,11 +11,11 @@ module Doorkeeper
 
         def issue_token
           @token ||= AccessToken.find_or_create_for(
-              pre_auth.client,
-              resource_owner.id,
-              pre_auth.scopes,
-              configuration.access_token_expires_in,
-              false
+            pre_auth.client,
+            resource_owner.id,
+            pre_auth.scopes,
+            expiration,
+            false
           )
         end
 
@@ -29,6 +29,17 @@ module Doorkeeper
 
         def configuration
           Doorkeeper.configuration
+        end
+
+        def custom_access_token_expiration
+          configuration.
+            custom_access_token_expiration.
+            call(pre_auth.client)
+        end
+
+        def expiration
+          custom_access_token_expiration ||
+            configuration.access_token_expires_in
         end
       end
     end

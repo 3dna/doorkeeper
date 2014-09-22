@@ -152,26 +152,27 @@ module Doorkeeper
 
     option :resource_owner_authenticator,
            as: :authenticate_resource_owner,
-           default: (lambda do |routes|
+           default: (lambda do |_routes|
              logger.warn(I18n.translate('doorkeeper.errors.messages.resource_owner_authenticator_not_configured'))
              nil
            end)
     option :admin_authenticator,
            as: :authenticate_admin,
-           default: ->(routes) {}
+           default: ->(_routes) {}
     option :resource_owner_from_credentials,
-           default: (lambda do |routes|
+           default: (lambda do |_routes|
              warn(I18n.translate('doorkeeper.errors.messages.credential_flow_not_configured'))
              nil
            end)
-    option :skip_authorization,            default: ->(routes) {}
-    option :access_token_expires_in,       default: 7200
-    option :authorization_code_expires_in, default: 600
-    option :orm,                           default: :active_record
-    option :native_redirect_uri,           default: 'urn:ietf:wg:oauth:2.0:oob'
-    option :active_record_options,         default: {}
-    option :realm,                         default: 'Doorkeeper'
-    option :wildcard_redirect_uri,         default: false
+    option :skip_authorization,             default: ->(_routes) {}
+    option :access_token_expires_in,        default: 7200
+    option :custom_access_token_expiration, default: lambda { |_app| nil }
+    option :authorization_code_expires_in,  default: 600
+    option :orm,                            default: :active_record
+    option :native_redirect_uri,            default: 'urn:ietf:wg:oauth:2.0:oob'
+    option :active_record_options,          default: {}
+    option :realm,                          default: 'Doorkeeper'
+    option :wildcard_redirect_uri,          default: false
     option :grant_flows,
            default: %w(authorization_code implicit password client_credentials)
 
