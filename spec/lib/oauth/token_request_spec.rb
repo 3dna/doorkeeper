@@ -45,7 +45,6 @@ module Doorkeeper::OAuth
     end
 
     context 'with custom expirations' do
-
       let(:custom_ttl) { 1233 }
 
       before do
@@ -59,7 +58,6 @@ module Doorkeeper::OAuth
         token = Doorkeeper::AccessToken.first
         expect(token.expires_in).to eq(custom_ttl)
       end
-
     end
 
     context 'token reuse' do
