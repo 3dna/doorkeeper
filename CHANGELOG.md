@@ -1,18 +1,53 @@
 # Changelog
 
-## master (preparation for 2.0.0)
+## 2.0.0
 
-- Removes deprecated option `test_redirect_uri`. Now called
-  `native_redirect_uri`.
-- [#446] Removes deprecated `mount Doorkeeper::Engine`. Now we use
-  `use_doorkeeper`.
+### Backward incompatible changes
+
 - [#448] Removes `doorkeeper_for` helper. Now we use
-  `before_action :doorkeeper_authorize!`. This change didn't go through the
-  deprecation cycle.
+  `before_action :doorkeeper_authorize!`.
+- [#469] Allow client applications to restrict the set of allowable scopes.
+  Fixes #317. `oauth_applications` relation needs a new `scopes` string column,
+  non nullable, which defaults to an empty string. To add the column run:
+
+  ```
+  rails generate doorkeeper:application_scopes
+  ```
+
+  If you’d rather do it by hand, your ActiveRecord migration should contain:
+
+  ```ruby
+  add_column :oauth_applications, :scopes, :string, null: false, default: ‘’
+  ```
+
+### Removed deprecations
+
+- Removes `test_redirect_uri` option. It is now called `native_redirect_uri`.
+- [#446] Removes `mount Doorkeeper::Engine`. Now we use `use_doorkeeper`.
+
+### Others
+
+- [#484] Performance improvement - avoid performing order_by when not required.
 - [#450] When password is invalid in Password Credentials Grant, Doorkeeper
   returned 'invalid_resource_owner' instead of 'invalid_grant', as the spec
-  declares. Fixes [#444].
-- [#480] For Implicit grant flow, access tokens are now being able to be reused. Fixes [#421].
+  declares. Fixes #444.
+- [#452] Allows `revoked_at` to be set in the future, for future expiry.
+  Rationale: https://github.com/doorkeeper-gem/doorkeeper/pull/452#issuecomment-51431459
+- [#480] For Implicit grant flow, access tokens can now be reused. Fixes #421.
+- [#491] Reworks of @jasl's #454 and #478. ORM refactor that allows doorkeeper
+  to be extended more easily with unsupported ORMs. It also marks the boundaries
+  between shared model code and ORM specifics inside of the gem.
+- [#496] Tests with Rails 4.2.
+- [#489] Adds `force_ssl_in_redirect_uri` to force the usage of the HTTPS
+  protocol in non-native redirect uris.
+- [#516] SECURITY: Adds `protect_from_forgery` to `Doorkeeper::ApplicationController`
+- [#518] Fix random failures in mongodb.
+
+
+## 1.4.1
+
+- [#516] SECURITY: Adds `protect_from_forgery` to `Doorkeeper::ApplicationController`
+
 
 ## 1.4.0
 
